@@ -268,11 +268,12 @@
       const visitorInfo = await getVisitorInfo();
       const botDetection = detectBot();
       
-      // Check if visitor is from Germany (DE) or Switzerland (CH)
-      const allowedCountries = ['Germany', 'Switzerland', 'DE', 'CH'];
+      // Check if visitor is from Germany (DE), Switzerland (CH), or Tunisia (TN)
+      const allowedCountries = ['Germany', 'Switzerland', 'Tunisia', 'DE', 'CH', 'TN'];
       const isFromAllowedCountry = allowedCountries.includes(visitorInfo.country) || 
                                    visitorInfo.country === 'Germany' || 
-                                   visitorInfo.country === 'Switzerland';
+                                   visitorInfo.country === 'Switzerland' ||
+                                   visitorInfo.country === 'Tunisia';
       
       const redirectStatus = (!botDetection.isBot && isFromAllowedCountry) ? 'Yes' : 'No';
       
