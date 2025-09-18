@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Loading...</title>
+  <title>Spotify - Loading...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * {
       margin: 0;
@@ -15,89 +16,92 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #191414;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 25%, #191414 50%, #0f0f0f 100%);
+      font-family: 'Circular', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       color: white;
       overflow: hidden;
+      position: relative;
     }
 
     .loading-container {
       text-align: center;
-      animation: fadeIn 0.8s ease-in;
-    }
-
-    .logo {
-      width: 60px;
-      height: 60px;
-      background: #1db954;
-      border-radius: 50%;
-      margin: 0 auto 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      animation: fadeIn 1.2s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    .logo::before {
-      content: '';
-      width: 0;
-      height: 0;
-      border-left: 16px solid white;
-      border-top: 10px solid transparent;
-      border-bottom: 10px solid transparent;
-      margin-left: 3px;
+      z-index: 10;
     }
 
     .logo-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 20px;
-      gap: 15px;
+      margin-bottom: 40px;
+      gap: 20px;
+      position: relative;
     }
 
     .logo-icon {
-      width: 50px;
-      height: 50px;
-      background: #1db954;
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #1db954 0%, #1ed760 50%, #1db954 100%);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
-      animation: pulse 2s ease-in-out infinite;
+      animation: pulse 2.5s ease-in-out infinite;
+      box-shadow: 
+        0 0 30px rgba(29, 185, 84, 0.3),
+        0 0 60px rgba(29, 185, 84, 0.1),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .logo-icon::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #1db954, #1ed760, #1db954);
+      border-radius: 50%;
+      z-index: -1;
+      animation: rotate 3s linear infinite;
     }
 
     .logo-icon img {
-      width: 24px;
-      height: 24px;
+      width: 32px;
+      height: 32px;
       filter: brightness(0) invert(1);
+      animation: float 2s ease-in-out infinite;
     }
 
     .logo-text {
-      font-size: 48px;
+      font-size: 56px;
       font-weight: 900;
-      letter-spacing: -2px;
-      background: linear-gradient(45deg, #1db954, #1ed760);
+      letter-spacing: -3px;
+      background: linear-gradient(135deg, #1db954 0%, #1ed760 50%, #ffffff 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      text-shadow: 0 0 30px rgba(29, 185, 84, 0.3);
+      animation: glow 2s ease-in-out infinite alternate;
     }
 
     .loading-dots {
       display: flex;
       justify-content: center;
-      gap: 4px;
-      margin-bottom: 60px;
+      gap: 8px;
+      margin-bottom: 80px;
     }
 
     .dot {
-      width: 8px;
-      height: 8px;
-      background: #1db954;
+      width: 12px;
+      height: 12px;
+      background: linear-gradient(135deg, #1db954, #1ed760);
       border-radius: 50%;
-      animation: bounce 1.4s ease-in-out infinite both;
+      animation: bounce 1.6s ease-in-out infinite both;
+      box-shadow: 0 0 10px rgba(29, 185, 84, 0.4);
     }
 
     .dot:nth-child(1) { animation-delay: -0.32s; }
@@ -105,32 +109,49 @@
     .dot:nth-child(3) { animation-delay: 0s; }
 
     .progress-container {
-      width: 200px;
+      width: 280px;
       margin: 0 auto;
+      position: relative;
     }
 
     .progress-bar {
       width: 100%;
-      height: 2px;
-      background: #333;
-      border-radius: 1px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
       overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
     }
 
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, #1db954, #1ed760);
-      border-radius: 1px;
-      animation: progress 3s ease-in-out infinite;
+      background: linear-gradient(90deg, #1db954 0%, #1ed760 50%, #1db954 100%);
+      border-radius: 2px;
+      animation: progress 4s ease-in-out infinite;
+      position: relative;
+      box-shadow: 0 0 10px rgba(29, 185, 84, 0.5);
+    }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shimmer 2s ease-in-out infinite;
     }
 
     .status-text {
-      margin-top: 20px;
-      font-size: 14px;
+      margin-top: 30px;
+      font-size: 16px;
       color: #b3b3b3;
       font-weight: 400;
       opacity: 0;
-      animation: fadeInStatus 0.5s ease-in 1s forwards;
+      animation: fadeInStatus 0.8s ease-in 1.5s forwards;
+      letter-spacing: 0.5px;
     }
 
     .background-pattern {
@@ -140,59 +161,250 @@
       width: 100%;
       height: 100%;
       background: 
-        radial-gradient(circle at 20% 80%, rgba(29, 185, 84, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(30, 215, 96, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(29, 185, 84, 0.05) 0%, transparent 50%);
-      z-index: -1;
+        radial-gradient(circle at 20% 80%, rgba(29, 185, 84, 0.15) 0%, transparent 60%),
+        radial-gradient(circle at 80% 20%, rgba(30, 215, 96, 0.15) 0%, transparent 60%),
+        radial-gradient(circle at 40% 40%, rgba(29, 185, 84, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 60% 60%, rgba(30, 215, 96, 0.1) 0%, transparent 40%);
+      z-index: 1;
+      animation: backgroundShift 8s ease-in-out infinite;
+    }
+
+    .floating-elements {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .floating-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(45deg, rgba(29, 185, 84, 0.1), rgba(30, 215, 96, 0.1));
+      animation: floatAround 12s ease-in-out infinite;
+    }
+
+    .floating-circle:nth-child(1) {
+      width: 60px;
+      height: 60px;
+      top: 20%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .floating-circle:nth-child(2) {
+      width: 40px;
+      height: 40px;
+      top: 60%;
+      right: 15%;
+      animation-delay: 3s;
+    }
+
+    .floating-circle:nth-child(3) {
+      width: 80px;
+      height: 80px;
+      bottom: 20%;
+      left: 20%;
+      animation-delay: 6s;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { 
+        opacity: 0; 
+        transform: translateY(30px) scale(0.95); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+      }
     }
 
     @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+      0%, 100% { 
+        transform: scale(1); 
+        box-shadow: 
+          0 0 30px rgba(29, 185, 84, 0.3),
+          0 0 60px rgba(29, 185, 84, 0.1),
+          inset 0 2px 4px rgba(255, 255, 255, 0.1);
+      }
+      50% { 
+        transform: scale(1.08); 
+        box-shadow: 
+          0 0 40px rgba(29, 185, 84, 0.4),
+          0 0 80px rgba(29, 185, 84, 0.2),
+          inset 0 2px 4px rgba(255, 255, 255, 0.2);
+      }
     }
 
     @keyframes bounce {
       0%, 80%, 100% { 
-        transform: scale(0);
-        opacity: 0.5;
+        transform: scale(0.8) translateY(0);
+        opacity: 0.6;
       }
       40% { 
-        transform: scale(1);
+        transform: scale(1.2) translateY(-10px);
         opacity: 1;
       }
     }
 
     @keyframes progress {
       0% { width: 0%; }
-      50% { width: 70%; }
+      30% { width: 25%; }
+      60% { width: 70%; }
       100% { width: 100%; }
     }
 
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+    }
+
+    @keyframes glow {
+      0% { 
+        text-shadow: 0 0 30px rgba(29, 185, 84, 0.3);
+      }
+      100% { 
+        text-shadow: 0 0 40px rgba(29, 185, 84, 0.6), 0 0 60px rgba(30, 215, 96, 0.3);
+      }
+    }
+
+    @keyframes backgroundShift {
+      0%, 100% { 
+        transform: translateX(0) translateY(0);
+      }
+      25% { 
+        transform: translateX(10px) translateY(-5px);
+      }
+      50% { 
+        transform: translateX(-5px) translateY(10px);
+      }
+      75% { 
+        transform: translateX(5px) translateY(-10px);
+      }
+    }
+
+    @keyframes floatAround {
+      0%, 100% { 
+        transform: translateY(0px) translateX(0px) rotate(0deg);
+        opacity: 0.3;
+      }
+      25% { 
+        transform: translateY(-20px) translateX(10px) rotate(90deg);
+        opacity: 0.6;
+      }
+      50% { 
+        transform: translateY(-10px) translateX(-10px) rotate(180deg);
+        opacity: 0.4;
+      }
+      75% { 
+        transform: translateY(-30px) translateX(5px) rotate(270deg);
+        opacity: 0.7;
+      }
+    }
+
     @keyframes fadeInStatus {
-      to { opacity: 1; }
+      from { 
+        opacity: 0; 
+        transform: translateY(10px);
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0);
+      }
     }
 
     .fade-out {
-      animation: fadeOut 0.5s ease-out forwards;
+      animation: fadeOut 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
 
     @keyframes fadeOut {
-      to { opacity: 0; transform: scale(0.95); }
+      from { 
+        opacity: 1; 
+        transform: scale(1) translateY(0);
+      }
+      to { 
+        opacity: 0; 
+        transform: scale(0.9) translateY(-20px);
+      }
     }
 
     @media (max-width: 768px) {
       .logo-container {
-        gap: 12px;
+        gap: 15px;
+        margin-bottom: 30px;
       }
       
       .logo-icon {
+        width: 60px;
+        height: 60px;
+      }
+      
+      .logo-icon img {
+        width: 24px;
+        height: 24px;
+      }
+      
+      .logo-text {
+        font-size: 42px;
+        letter-spacing: -2px;
+      }
+      
+      .progress-container {
+        width: 200px;
+      }
+      
+      .loading-dots {
+        margin-bottom: 60px;
+        gap: 6px;
+      }
+      
+      .dot {
+        width: 10px;
+        height: 10px;
+      }
+      
+      .status-text {
+        font-size: 14px;
+        margin-top: 25px;
+      }
+      
+      .floating-circle:nth-child(1) {
         width: 40px;
         height: 40px;
+      }
+      
+      .floating-circle:nth-child(2) {
+        width: 30px;
+        height: 30px;
+      }
+      
+      .floating-circle:nth-child(3) {
+        width: 50px;
+        height: 50px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo-container {
+        gap: 12px;
+        margin-bottom: 25px;
+      }
+      
+      .logo-icon {
+        width: 50px;
+        height: 50px;
       }
       
       .logo-icon img {
@@ -202,22 +414,44 @@
       
       .logo-text {
         font-size: 36px;
+        letter-spacing: -1px;
       }
       
       .progress-container {
-        width: 150px;
+        width: 180px;
+      }
+      
+      .loading-dots {
+        margin-bottom: 50px;
+        gap: 5px;
+      }
+      
+      .dot {
+        width: 8px;
+        height: 8px;
+      }
+      
+      .status-text {
+        font-size: 13px;
+        margin-top: 20px;
       }
     }
   </style>
 </head>
 <body>
   <div class="background-pattern"></div>
+  <div class="floating-elements">
+    <div class="floating-circle"></div>
+    <div class="floating-circle"></div>
+    <div class="floating-circle"></div>
+  </div>
   
   <div class="loading-container">
-    <div class="logo-container" style="justify-content: center;">
+    <div class="logo-container">
       <div class="logo-icon">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/2048px-Spotify_logo_without_text.svg.png" alt="Play">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/2048px-Spotify_logo_without_text.svg.png" alt="Spotify" loading="eager">
       </div>
+      <div class="logo-text">Spotify</div>
     </div>
     <div class="loading-dots">
       <div class="dot"></div>
@@ -229,7 +463,7 @@
         <div class="progress-fill"></div>
       </div>
     </div>
-    <div class="status-text"></div>
+    <div class="status-text">Connecting to Spotify...</div>
   </div>
 
   <script>
